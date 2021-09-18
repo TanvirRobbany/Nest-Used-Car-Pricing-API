@@ -21,4 +21,18 @@ export class UsersController {
     //     return this.usersService.find(email);
     // }
 
+    @Get()
+    findAllUsers() {
+        return this.usersService.find();
+    }
+
+    @Patch()
+    updateUser() {
+        
+    }
+
+    @Delete(':id')
+    removeUser(@Param('id') id: string) {
+        return this.usersService.remove(parseInt(id));
+    }
 }
