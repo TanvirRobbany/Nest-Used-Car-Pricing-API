@@ -23,11 +23,11 @@ export class UsersService {
         return user;
     }
 
-    // find(email: string) {
-    //     return this.repo.find({email})
-    // }
+    findUser(email: string) {
+        return this.repo.find({email})
+    }
 
-    find() {
+    findAll() {
         return this.repo.find({})
     }
 

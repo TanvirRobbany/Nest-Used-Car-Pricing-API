@@ -2,17 +2,18 @@ import { Controller, Body, Post, Get, Patch, Delete, Param, Query, UseIntercepto
 import { CreateUseDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/user-update.dto';
 import { UsersService } from './users.service';
+import { AuthService } from './auth.service';
 import { SerializeInterceptor } from 'src/interceptors/serialize.interceptor';
 import { UserDto } from './dtos/user.dto';
 
 @Controller('auth')
 @UseInterceptors(new SerializeInterceptor(UserDto))
 export class UsersController {
-    constructor(private usersService: UsersService) {}
+    constructor(private usersService: UsersService, private authService: AuthService) {}
 
     @Post('signup')
     createUser(@Body() body: CreateUseDto) {
-        this.usersService.create(body.email, body.password);
+        return this.authService.signup(body.email, body.password);
     }
 
     @Get(':id')
@@ -21,14 +22,14 @@ export class UsersController {
         return this.usersService.findOne(parseInt(id));
     }
 
-    // @Get()
-    // findAllUsers(@Query('email') email: string) {
-    //     return this.usersService.find(email);
-    // }
+    @Get()
+    findUsers(@Query('email') email: string) {
+        return this.usersService.findUser(email);
+    }
 
     @Get()
     findAllUsers() {
-        return this.usersService.find();
+        return this.usersService.findAll();
     }
 
     @Patch(':id')
