@@ -23,7 +23,7 @@ Content-Type: application/json
 
 {
     "email": "hello@gmail.com",
-    "password": "123123"
+    "password": "asdfasdf"
 }
 
 ### Remove a particular user with a given id
