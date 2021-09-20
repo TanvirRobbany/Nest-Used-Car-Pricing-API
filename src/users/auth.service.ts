@@ -1,9 +1,7 @@
 import { Injectable, BadRequestException, NotFoundException } from "@nestjs/common";
 import { UsersService } from "./users.service";
-import { randomBytes, scrypt as _scrypt } from "crypto";
-import { promisify } from "util";
+const bcrypt = require('bcrypt');
 
-const scrypt = promisify(_scrypt);
 @Injectable()
 export class AuthService{
     constructor(private usersService: UsersService) {}
@@ -16,12 +14,11 @@ export class AuthService{
         }
 
         // Hash ther user's password
-        const salt = randomBytes(8).toString('hex');
-        const hash = (await scrypt(password, salt, 32)) as Buffer;
-        const result = salt + '/' + hash.toString('hex');
+        const salt = await bcrypt.genSalt(15);
+        const hashedPassword = await bcrypt.hash(password, salt);
 
         // Create a new user and save the user
-        const user = this.usersService.create(email, result);
+        const user = await this.usersService.create(email, hashedPassword);
 
         // Return the user
         return user;
@@ -32,14 +29,12 @@ export class AuthService{
         if (!user) {
             throw new NotFoundException('User does not exist!');
         }
-
-        const [salt, storedHash] = user.password.split('/');
-        const hash = (await scrypt(password, salt, 32)) as Buffer;
-
-        if (storedHash !== hash.toString('hex')) {
-            throw new BadRequestException('Invalid password');
-        }
         
+        // return user;
+        const isMatched = await bcrypt.compare(password, user.password)
+        if (!isMatched) {
+            throw new BadRequestException('Invalid Password');
+        }
         return user;
     }
 }
