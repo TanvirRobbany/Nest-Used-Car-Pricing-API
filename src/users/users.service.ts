@@ -25,15 +25,15 @@ export class UsersService {
         return user;
     }
 
-    // async findOne(id: number) {
-    //     const user = await this.repo.findOne(id)
+    async findOne(id: string) {
+        const user = await this.repo.findById(id)
 
-    //     if (!user) {
-    //         throw new NotFoundException('User does not exist!')
-    //     }
+        if (!user) {
+            throw new NotFoundException('User does not exist!')
+        }
 
-    //     return user;
-    // }
+        return user;
+    }
 
     // findUser(email: string) {
     //     return this.repo.find({email})

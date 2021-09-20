@@ -26,11 +26,11 @@ export class UsersController {
     //     return user;
     // }
 
-    // @Get(':id')
-    // findUser(@Param('id') id: string) {
-    //     // console.log('Handler is running...')
-    //     return this.usersService.findOne(parseInt(id));
-    // }
+    @Get(':id')
+    findUser(@Param('id') id: string) {
+        // console.log('Handler is running...')
+        return this.usersService.findOne(id);
+    }
 
     // @Get()
     // findUsers(@Query('email') email: string) {
