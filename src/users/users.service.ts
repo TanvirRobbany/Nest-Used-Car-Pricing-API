@@ -5,6 +5,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 // import { User } from './user.entity';
 import {User} from './schemas/user.schema'
+import { VirtualTimeScheduler } from 'rxjs';
 
 @Injectable()
 export class UsersService {
@@ -12,10 +13,6 @@ export class UsersService {
     constructor(@InjectModel('Users') private repo: Model<User>) {}
 
     async create(email: string, password: string) {
-        // const user = this.repo.create({email, password});
-
-        // return this.repo.user.save();
-
         const newUser = new this.repo({
             email,
             password
@@ -35,33 +32,36 @@ export class UsersService {
         return user;
     }
 
-    // findUser(email: string) {
-    //     return this.repo.find({email})
-    // }
+    findUser(email: string) {
+        return this.repo.find({email})
+    }
 
-    // findAll() {
-    //     return this.repo.find({})
-    // }
+    findAll() {
+        return this.repo.find({})
+    }
 
-    // async update(id: number, attrs: Partial<User>) {
-    //     const user = await this.findOne(id);
+    async update(id: string, attrs: Partial<User>) {
+        const user = await this.repo.findById(id);
+        if (!user) {
+            throw new NotFoundException('User does not exist!');
+        }
+        let query = {_id: id};
+        let newData = {
+            email: attrs.email,
+            password: attrs.password,
+        }
 
-    //     if (!user) {
-    //         throw new NotFoundException('User does not exist!');
-    //     }
+        const updatedUser = await this.repo.findByIdAndUpdate(query, newData);
+        return updatedUser;
+    }
 
-    //     Object.assign(user, attrs);
+    async remove(id: string) {
+        const user = await this.findOne(id);
 
-    //     // return this.repo.save(user);
-    // }
+        if (!user) {
+            throw new NotFoundException('User does not exist!')
+        }
 
-    // async remove(id: number) {
-    //     const user = await this.findOne(id);
-
-    //     if (!user) {
-    //         throw new NotFoundException('User does not exist!')
-    //     }
-
-    //     return this.repo.remove(user);
-    // }
+        return this.repo.findByIdAndDelete(id);
+    }
 }
