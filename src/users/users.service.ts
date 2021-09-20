@@ -1,55 +1,67 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from './user.entity';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+// import { User } from './user.entity';
+import {User} from './schemas/user.schema'
 
 @Injectable()
 export class UsersService {
-    constructor(@InjectRepository(User) private repo: Repository<User>){}
+    // constructor(@InjectRepository(User) private repo: Repository<User>){}
+    constructor(@InjectModel('Users') private repo: Model<User>) {}
 
-    create(email: string, password: string) {
-        const user = this.repo.create({email, password});
+    async create(email: string, password: string) {
+        // const user = this.repo.create({email, password});
 
-        return this.repo.save(user);
-    }
+        // return this.repo.user.save();
 
-    async findOne(id: number) {
-        const user = await this.repo.findOne(id)
+        const newUser = new this.repo({
+            email,
+            password
+        })
 
-        if (!user) {
-            throw new NotFoundException('User does not exist!')
-        }
-
+        const user = await newUser.save();
         return user;
     }
 
-    findUser(email: string) {
-        return this.repo.find({email})
-    }
+    // async findOne(id: number) {
+    //     const user = await this.repo.findOne(id)
 
-    findAll() {
-        return this.repo.find({})
-    }
+    //     if (!user) {
+    //         throw new NotFoundException('User does not exist!')
+    //     }
 
-    async update(id: number, attrs: Partial<User>) {
-        const user = await this.findOne(id);
+    //     return user;
+    // }
 
-        if (!user) {
-            throw new NotFoundException('User does not exist!');
-        }
+    // findUser(email: string) {
+    //     return this.repo.find({email})
+    // }
 
-        Object.assign(user, attrs);
+    // findAll() {
+    //     return this.repo.find({})
+    // }
 
-        return this.repo.save(user);
-    }
+    // async update(id: number, attrs: Partial<User>) {
+    //     const user = await this.findOne(id);
 
-    async remove(id: number) {
-        const user = await this.findOne(id);
+    //     if (!user) {
+    //         throw new NotFoundException('User does not exist!');
+    //     }
 
-        if (!user) {
-            throw new NotFoundException('User does not exist!')
-        }
+    //     Object.assign(user, attrs);
 
-        return this.repo.remove(user);
-    }
+    //     // return this.repo.save(user);
+    // }
+
+    // async remove(id: number) {
+    //     const user = await this.findOne(id);
+
+    //     if (!user) {
+    //         throw new NotFoundException('User does not exist!')
+    //     }
+
+    //     return this.repo.remove(user);
+    // }
 }

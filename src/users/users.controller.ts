@@ -13,41 +13,42 @@ export class UsersController {
 
     @Post('signup')
     async createUser(@Body() body: CreateUseDto, @Session() session: any) {
-        const user = await this.authService.signup(body.email, body.password);
+        console.log('controller')
+        const user = await this.usersService.create(body.email, body.password);
         session.userId = user.id;
         return user;
     }
 
-    @Post('signin')
-    async signin(@Body() body: CreateUseDto, @Session() session: any) {
-        const user = await this.authService.signin(body.email, body.password);
-        session.userId = user.id;
-        return user;
-    }
+    // @Post('signin')
+    // async signin(@Body() body: CreateUseDto, @Session() session: any) {
+    //     const user = await this.authService.signin(body.email, body.password);
+    //     session.userId = user.id;
+    //     return user;
+    // }
 
-    @Get(':id')
-    findUser(@Param('id') id: string) {
-        // console.log('Handler is running...')
-        return this.usersService.findOne(parseInt(id));
-    }
+    // @Get(':id')
+    // findUser(@Param('id') id: string) {
+    //     // console.log('Handler is running...')
+    //     return this.usersService.findOne(parseInt(id));
+    // }
 
-    @Get()
-    findUsers(@Query('email') email: string) {
-        return this.usersService.findUser(email);
-    }
+    // @Get()
+    // findUsers(@Query('email') email: string) {
+    //     return this.usersService.findUser(email);
+    // }
 
-    @Get()
-    findAllUsers() {
-        return this.usersService.findAll();
-    }
+    // @Get()
+    // findAllUsers() {
+    //     return this.usersService.findAll();
+    // }
 
-    @Patch(':id')
-    updateUser(@Param('id') id: string, @Body() body: UpdateUserDto) {
-        return this.usersService.update(parseInt(id), body);
-    }
+    // @Patch(':id')
+    // updateUser(@Param('id') id: string, @Body() body: UpdateUserDto) {
+    //     return this.usersService.update(parseInt(id), body);
+    // }
 
-    @Delete(':id')
-    removeUser(@Param('id') id: string) {
-        return this.usersService.remove(parseInt(id));
-    }
+    // @Delete(':id')
+    // removeUser(@Param('id') id: string) {
+    //     return this.usersService.remove(parseInt(id));
+    // }
 }
