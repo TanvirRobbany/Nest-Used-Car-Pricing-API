@@ -25,9 +25,14 @@ export class UsersController {
         return user;
     }
 
-    @Get('whoAmI')
+    @Get('whoami')
     whoAmI(@Session() session: any){
         return this.usersService.findOne(session.userId);
+    }
+
+    @Post('signout')
+    signOut(@Session() session: any) {
+        session.userId = null;
     }
 
     @Get(':id')
