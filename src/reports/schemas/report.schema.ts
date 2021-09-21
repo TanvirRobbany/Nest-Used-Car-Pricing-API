@@ -1,13 +1,18 @@
-import * as mongosse from 'mongoose';
+import * as mongoose from 'mongoose';
+import { MongoQueryRunner } from 'typeorm/driver/mongodb/MongoQueryRunner';
 
-export const ReportSchema = new mongosse.Schema({
+export const ReportSchema = new mongoose.Schema({
     make: String,
     model: String,
     mileage: Number,
     year: Number,
     longitude: Number, 
     latitude: Number,
-    price: Number
+    price: Number,
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'users'
+    }
 })
 
 export interface Report {
