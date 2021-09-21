@@ -12,7 +12,7 @@ export class CreateReportDto {
     @Min(0)
     @Max(1000000)
     mileage: number;
-    
+
     @IsNumber()
     @Min(1930)
     @Max(2021)
@@ -29,4 +29,6 @@ export class CreateReportDto {
     @Min(0)
     @Max(1000000)
     price: number;
+
+    user: string;
 }
