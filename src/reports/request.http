@@ -1,0 +1,7 @@
+### Create new report
+POST http://localhost:5000/reports
+Content-Type: application/json
+
+{
+    
+}
